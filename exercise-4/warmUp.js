@@ -16,7 +16,21 @@
  * F = anything < 60
  */
 function toLetterGrade(numGrade) {
-  // TODO
+  var str = "";
+  if (numGrade > 100 || numGrade < 0) {
+    return "INVALID";
+  } else if (numGrade >= 90) {
+    str = "A";
+  } else if (numGrade >= 80) {
+    str = "B";
+  } else if (numGrade >= 70) {
+    str = "C";
+  } else if (numGrade >= 60) {
+    str = "D";
+  } else {
+    str = "F";
+  }
+  return str;
 }
 
 /**
@@ -28,6 +42,14 @@ function toLetterGrade(numGrade) {
  */
 function getEvenElements(array) {
   // TODO
+  const arr = [];
+  for (let i = 0; i < array.length; i++) {
+    if ((array[i] % 2) == 0) {
+      //console.log(arr.length);
+      arr[arr.length] = array[i];
+    }
+  }
+  return arr;
 }
 
 /**
@@ -41,10 +63,23 @@ function getEvenElements(array) {
  */
 function findLongestWord(string) {
   // TODO
+  var max = 0;
+  var temp = 0;
+
+
+  for (let i = 0; i < string.length; i++) {
+    if (string.charAt(i) == " ") {
+      temp = 0;
+    } else {
+      temp++;
+      max = Math.max(temp, max);
+    }
+  }
+  return max;
 }
 
 /**
- * Task 4: Create a function that takes in 2 objects and return an object that 
+ * Task 4: Create a function that takes in 2 objects and return an object that
  * is the combination of the 2
  *
  * Example:
@@ -62,10 +97,12 @@ function findLongestWord(string) {
         age: 10,
         breed: "Pomeranian",
         friendly: false
-    } 
+    }
  */
 function combineObjects(object1, object2) {
   // TODO
+  return { ...object1, ...object2 };
+
 }
 
 /**
@@ -77,7 +114,12 @@ function combineObjects(object1, object2) {
  *  Example: [1, 2, 3] -> [3, 2, 1]
  */
 function reverseArr(array) {
-  // TODO
+  for (let i = 0; i < array.length / 2; i++) {
+    let temp = array[i];
+    array[i] = array[array.length - 1 - i];
+    array[array.length - 1 - i] = temp;
+  }
+  return array;
 }
 
 // DO NOT EDIT BELOW THIS LINE -- the code is for testing purposes only!
