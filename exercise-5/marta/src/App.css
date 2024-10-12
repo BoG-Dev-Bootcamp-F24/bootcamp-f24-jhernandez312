@@ -1,0 +1,80 @@
+/* NavBar */
+.navbar {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  width: 200px;
+}
+
+.navbar label {
+  font-weight: bold;
+}
+
+.navbar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.navbar li {
+  margin: 10px 0;
+}
+
+/* Line Header */
+.line-header {
+  text-align: center;
+}
+
+.line-buttons button {
+  margin: 5px;
+}
+
+/* Train List */
+.train-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Train Card */
+.train-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.train-logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.train-details {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.train-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.train-line {
+  background-color: gold;
+  padding: 5px;
+  border-radius: 3px;
+  margin-bottom: 5px;
+}
+
+.on-time {
+  color: green;
+}
+
+.delayed {
+  color: red;
+}
+
+.arrival-time {
+  font-size: 18px;
+  font-weight: bold;
+}
