@@ -1,14 +1,19 @@
 import React from 'react';
 
 export default function NavBar({ stations }) {
+    console.log("Stations passed to NavBar:", stations);
     return (
-        <nav className="navbar">
-            <label>Select your starting station</label>
-            <ul>
-                {stations.map((station, index) => (
-                    <li key={index}>{station}</li>
-                ))}
-            </ul>
-        </nav>
+        <div className="navbar">
+            <h2>Select your starting station</h2>
+            {stations.length > 0 ? (
+                <ul>
+                    {stations.map((station, index) => (
+                        <li key={index}>{station}</li>
+                    ))}
+                </ul>
+            ) : (
+                <p>No stations available</p>
+            )}
+        </div>
     );
 }

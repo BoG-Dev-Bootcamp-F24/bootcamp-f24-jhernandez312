@@ -1,13 +1,15 @@
-/* NavBar */
 .navbar {
   background-color: #333;
   color: white;
-  padding: 10px;
-  width: 200px;
+  padding: 20px;
+  width: 220px;
+  font-family: Arial, Helvetica, sans-serif;
+
 }
 
 .navbar label {
   font-weight: bold;
+  margin-bottom: 20px;
 }
 
 .navbar ul {
@@ -17,64 +19,171 @@
 
 .navbar li {
   margin: 10px 0;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.navbar li:hover {
+  background-color: #444;
+  padding-left: 5px;
 }
 
 /* Line Header */
 .line-header {
   text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-bottom: 2px solid #ddd;
+  font-family: Arial, Helvetica, sans-serif;
+
+}
+
+/* Line Buttons */
+.line-buttons {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  background-color: #f8f8f8;
+  border-bottom: 2px solid #ddd;
 }
 
 .line-buttons button {
-  margin: 5px;
+  margin: 0 10px;
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: none;
+  background-color: #eaeaea;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.line-buttons button:hover {
+  background-color: #d4d4d4;
 }
 
 /* Train List */
 .train-list {
+  font-family: Arial, Helvetica, sans-serif;
   display: flex;
   flex-direction: column;
+  padding: 20px;
 }
 
-/* Train Card */
 .train-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 15px;
   border-bottom: 1px solid #ddd;
+  background-color: #fdfdfd;
+  margin-bottom: 10px;
 }
 
 .train-logo {
-  font-size: 24px;
+  font-size: 40px;
   font-weight: bold;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  margin-right: 15px;
 }
 
 .train-details {
   flex-grow: 1;
-  margin-left: 10px;
 }
 
 .train-info {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-.train-line {
+.train-info .train-line {
+  display: inline-block;
   background-color: gold;
-  padding: 5px;
+  padding: 5px 10px;
   border-radius: 3px;
-  margin-bottom: 5px;
+  font-weight: bold;
+  margin-right: 10px;
 }
 
-.on-time {
+.train-info .on-time {
   color: green;
+  font-weight: bold;
 }
 
-.delayed {
+.train-info .delayed {
   color: red;
+  font-weight: bold;
 }
 
 .arrival-time {
-  font-size: 18px;
+  font-size: 24px;
+  font-weight: bold;
+  color: green;
+}
+
+/* Flexbox for layout */
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+.content-wrapper {
+  display: flex;
+  width: 100%;
+  flex: 1;
+}
+
+.main-content {
+  width: calc(100% - 220px);
+  /* Subtract the NavBar's width */
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.navbar ul {
+  padding: 0;
+  margin-top: 20px;
+}
+
+.train-logo {
+  font-size: 30px;
+  margin-right: 20px;
+}
+
+/* Adjust the Train List Card */
+.train-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 10px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.train-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 10px;
+  font-weight: bold;
+}
+
+.train-line {
+  border-radius: 40%;
+  width: 45px;
+}
+
+.arrival-time {
+  font-size: 22px;
+  color: green;
   font-weight: bold;
 }
