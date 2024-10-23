@@ -9,7 +9,7 @@ const LinesPage: React.FC = () => {
     const [stationData, setStationData] = useState<any[]>([]);
     const [trainData, setTrainData] = useState<any[]>([]);
     const [directionButtons, setDirectionButtons] = useState<string[]>(["Northbound", "Southbound"]);
-    const [activeFilter, setActiveFilter] = useState<string | null>(null); // Only one filter can be active
+    const [activeFilters, setActiveFilters] = useState<string[]>([]); // Allow multiple filters
     const [selectedStation, setSelectedStation] = useState<string | null>(null); // Track selected station
     const [selectedDirection, setSelectedDirection] = useState<string | null>(null); // Track selected direction
 
@@ -20,7 +20,7 @@ const LinesPage: React.FC = () => {
 
         // Reset filters when the line is changed
         setSelectedDirection(null);
-        setActiveFilter(null);
+        setActiveFilters([]); // Reset all active filters
         setSelectedStation(null); // Reset selected station
 
         // Set direction buttons based on the line selected
@@ -50,38 +50,39 @@ const LinesPage: React.FC = () => {
         fetchData();
     }, []);
 
-    // Function to handle station selection from NavBar
+    // Function to handle station selection from NavBar (toggle functionality)
     const handleStationSelect = (station: string | null) => {
-        setSelectedStation(station); // Update the selected station
-        console.log("Selected station:", station); // Debug the selected station
+        if (selectedStation === station) {
+            // If the clicked station is already selected, deselect it
+            setSelectedStation(null);
+        } else {
+            // Otherwise, set it as the selected station
+            setSelectedStation(station);
+        }
+        console.log("Selected station:", selectedStation === station ? 'None' : station);
     };
 
-    // Function to handle direction button clicks
+    // Function to handle direction button clicks (allow multiple directions)
     const handleDirectionChange = (direction: string) => {
         if (selectedDirection === direction) {
-            // If the selected direction is already active, toggle it off (return train list to normal)
+            // If the direction is already active, toggle it off
             setSelectedDirection(null);
-            setActiveFilter(null); // Reset the active filter as well
         } else {
-            // Otherwise, set the selected direction and reset active status filters
             setSelectedDirection(direction);
-            setActiveFilter(null); // Ensure no status filter is active
         }
         console.log("Selected direction:", selectedDirection === direction ? 'None' : direction);
     };
 
-    // Function to handle status filter button clicks (Arriving, Scheduled)
+    // Function to handle status filter button clicks (allow multiple status filters)
     const toggleFilter = (filter: string) => {
-        if (activeFilter === filter) {
-            // If the current filter is already active, toggle it off
-            setActiveFilter(null);
-            setSelectedDirection(null); // Reset direction as well
+        if (activeFilters.includes(filter)) {
+            // If the filter is already active, remove it
+            setActiveFilters(activeFilters.filter(f => f !== filter));
         } else {
-            // Otherwise, set the active filter and reset direction
-            setActiveFilter(filter);
-            setSelectedDirection(null); // Ensure no direction is active
+            // Otherwise, add the new filter
+            setActiveFilters([...activeFilters, filter]);
         }
-        console.log("Selected filter:", activeFilter === filter ? 'None' : filter);
+        console.log("Active filters:", activeFilters);
     };
 
     const filteredTrainData = trainData.filter(train => {
@@ -99,22 +100,25 @@ const LinesPage: React.FC = () => {
             console.log("Filtering train by station:", train.STATION); // Debug log to verify filtering by station
         }
 
+        // Filter by the selected direction (if any)
         if (selectedDirection) {
             matchesDirection = train.DIRECTION === selectedDirection;
-            console.log("Filtering train by direction:", train.DIRECTION); // Debug log to verify filtering by direction
         }
 
-        if (activeFilter === 'Arriving') {
+        // Filter by multiple status filters (e.g., Arriving, Scheduled)
+        if (activeFilters.includes('Arriving')) {
             const waitingSeconds = parseInt(train.WAITING_SECONDS);
-            matchesFilters = waitingSeconds <= 60; // Consider "Arriving" as trains arriving in 2 minutes or less
-        } else if (activeFilter === 'Scheduled') {
-            const waitingSeconds = parseInt(train.WAITING_SECONDS);
-            matchesFilters = waitingSeconds > 60; // Scheduled trains arriving in more than 2 minutes
+            matchesFilters = matchesFilters && waitingSeconds <= 60; // Consider "Arriving" as trains arriving in 2 minutes or less
         }
 
+        if (activeFilters.includes('Scheduled')) {
+            const waitingSeconds = parseInt(train.WAITING_SECONDS);
+            matchesFilters = matchesFilters && waitingSeconds > 60; // Scheduled trains arriving in more than 2 minutes
+        }
+
+        // Return trains that match all active filters
         return matchesLine && matchesStation && matchesDirection && matchesFilters;
     });
-
 
     // Correctly fetch stations for the current line
     const currentLineStations = stationData.find(line => line.line.toLowerCase() === currColor.toLowerCase());
@@ -131,13 +135,12 @@ const LinesPage: React.FC = () => {
                     lineName={currColor}
                     handleLineChange={handleLineChange}
                     directionButtons={directionButtons}
-                    activeFilters={activeFilter ? [activeFilter] : []} // Pass active filters as an array
-                    toggleFilter={toggleFilter} // Pass filter toggle function
-                    onDirectionChange={handleDirectionChange} // Pass direction change function
-                    selectedDirection={selectedDirection} // Pass selected direction
+                    activeFilters={activeFilters}
+                    toggleFilter={toggleFilter}
+                    onDirectionChange={handleDirectionChange}
+                    selectedDirection={selectedDirection}
                 />
 
-                {/* Conditionally render TrainList */}
                 {filteredTrainData.length > 0 ? (
                     <TrainList trains={filteredTrainData} currColor={currColor} />
                 ) : (
