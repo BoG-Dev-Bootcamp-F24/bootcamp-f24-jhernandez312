@@ -9,9 +9,9 @@ const NavBar: React.FC<NavBarProps> = ({ stations, onStationSelect }) => {
                     {stations.map((station, index) => (
                         <li
                             key={index}
-                            onClick={() => onStationSelect(station.replace(" STATION", ""))} // Normalize station name
+                            onClick={() => onStationSelect(station.replace(" STATION", ""))}
                         >
-                            {station.replace(" STATION", "")} {/* Display station name without "STATION" */}
+                            {station.replace(" STATION", "")}
                         </li>
                     ))}
                 </ul>

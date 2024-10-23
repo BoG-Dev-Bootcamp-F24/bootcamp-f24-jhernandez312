@@ -28,7 +28,6 @@
   padding-left: 5px;
 }
 
-/* Line Header */
 .line-header {
   text-align: center;
   font-size: 28px;
@@ -39,7 +38,6 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Line Buttons */
 .line-buttons {
   display: flex;
   justify-content: center;
@@ -63,7 +61,6 @@
   background-color: #d4d4d4;
 }
 
-/* Train List */
 .train-list {
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
@@ -100,7 +97,6 @@
   flex-direction: column;
 }
 
-/* Dynamic train line colors */
 .train-info .train-line {
   display: inline-block;
   padding: 5px 10px;
@@ -141,7 +137,6 @@
   color: green;
 }
 
-/* Flexbox for layout */
 .app-container {
   display: flex;
   height: 100vh;
@@ -155,7 +150,6 @@
 
 .main-content {
   width: calc(100% - 220px);
-  /* Subtract the NavBar's width */
   padding: 20px;
   overflow-y: auto;
 }
@@ -170,7 +164,6 @@
   margin-right: 20px;
 }
 
-/* Adjust the Train List Card */
 .train-card {
   display: flex;
   justify-content: space-between;
@@ -202,12 +195,10 @@
   font-weight: bold;
 }
 
-/* Flexbox for buttons in a row */
 .button-row {
   display: flex;
   justify-content: center;
   gap: 10px;
-  /* Space between buttons */
   margin-top: 10px;
 }
 

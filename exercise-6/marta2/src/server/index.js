@@ -39,25 +39,23 @@ const stationSchema = new mongoose.Schema({
 });
 
 
-const Train = mongoose.model("Train", trainSchema, 'train_data');  // Specify collection name 'train_data'
-const Station = mongoose.model("Station", stationSchema, 'station_data');  // Specify collection name 'station_data'
+const Train = mongoose.model("Train", trainSchema, 'train_data');
+const Station = mongoose.model("Station", stationSchema, 'station_data');
 
-// Route for fetching train data
 app.get("/api/train_data", async (req, res) => {
     try {
-        const trains = await Train.find();  // Fetch train data from the 'train_data' collection
-        res.json(trains);  // Return train data as JSON
+        const trains = await Train.find();
+        res.json(trains);
     } catch (error) {
         console.error("Error fetching train data:", error);
         res.status(500).json({ message: "Error fetching train data" });
     }
 });
 
-// Route for fetching station data
 app.get("/api/station_data", async (req, res) => {
     try {
-        const stations = await Station.find();  // Fetch station data from the 'station_data' collection
-        res.json(stations);  // Return station data as JSON
+        const stations = await Station.find();
+        res.json(stations);
     } catch (error) {
         console.error("Error fetching station data:", error);
         res.status(500).json({ message: "Error fetching station data" });

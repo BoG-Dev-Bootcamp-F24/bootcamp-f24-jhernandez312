@@ -23,7 +23,6 @@ const LineHeader: React.FC<LineHeaderProps> = ({ lineName, handleLineChange, dir
                 <button onClick={() => handleLineChange("Green")} style={{ backgroundColor: "green" }}>Green</button>
             </div>
 
-            {/* Combined Direction and Filter buttons in a row */}
             <div className="button-row">
                 <div className="direction-buttons">
                     {directionButtons.map((direction, index) => (
