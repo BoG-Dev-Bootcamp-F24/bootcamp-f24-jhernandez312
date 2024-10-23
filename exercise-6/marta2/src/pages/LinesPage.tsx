@@ -9,13 +9,21 @@ const LinesPage: React.FC = () => {
     const [stationData, setStationData] = useState<any[]>([]);
     const [trainData, setTrainData] = useState<any[]>([]);
     const [directionButtons, setDirectionButtons] = useState<string[]>(["Northbound", "Southbound"]);
-    const [activeFilters, setActiveFilters] = useState<string[]>([]); // Manage active filters
+    const [activeFilter, setActiveFilter] = useState<string | null>(null); // Only one filter can be active
     const [selectedStation, setSelectedStation] = useState<string | null>(null); // Track selected station
+    const [selectedDirection, setSelectedDirection] = useState<string | null>(null); // Track selected direction
 
     // Function to change the current line
     const handleLineChange = (line: string) => {
         setCurrColor(line);
         console.log("Current line set to:", line);
+
+        // Reset filters when the line is changed
+        setSelectedDirection(null);
+        setActiveFilter(null);
+        setSelectedStation(null); // Reset selected station
+
+        // Set direction buttons based on the line selected
         if (line === "Gold" || line === "Red") {
             setDirectionButtons(["Northbound", "Southbound"]);
         } else if (line === "Green" || line === "Blue") {
@@ -48,36 +56,67 @@ const LinesPage: React.FC = () => {
         console.log("Selected station:", station); // Debug the selected station
     };
 
-    // Function to handle filter button clicks
-    const toggleFilter = (filter: string) => {
-        if (activeFilters.includes(filter)) {
-            setActiveFilters(activeFilters.filter(f => f !== filter));
+    // Function to handle direction button clicks
+    const handleDirectionChange = (direction: string) => {
+        if (selectedDirection === direction) {
+            // If the selected direction is already active, toggle it off (return train list to normal)
+            setSelectedDirection(null);
+            setActiveFilter(null); // Reset the active filter as well
         } else {
-            setActiveFilters([...activeFilters, filter]);
+            // Otherwise, set the selected direction and reset active status filters
+            setSelectedDirection(direction);
+            setActiveFilter(null); // Ensure no status filter is active
         }
+        console.log("Selected direction:", selectedDirection === direction ? 'None' : direction);
     };
 
-    // Filter train data based on selected station and active filters
+    // Function to handle status filter button clicks (Arriving, Scheduled)
+    const toggleFilter = (filter: string) => {
+        if (activeFilter === filter) {
+            // If the current filter is already active, toggle it off
+            setActiveFilter(null);
+            setSelectedDirection(null); // Reset direction as well
+        } else {
+            // Otherwise, set the active filter and reset direction
+            setActiveFilter(filter);
+            setSelectedDirection(null); // Ensure no direction is active
+        }
+        console.log("Selected filter:", activeFilter === filter ? 'None' : filter);
+    };
+
     const filteredTrainData = trainData.filter(train => {
         let matchesLine = train.LINE.toLowerCase() === currColor.toLowerCase();
         let matchesStation = true;
+        let matchesDirection = true;
+        let matchesFilters = true;
 
+        // Normalize the station names for comparison
         if (selectedStation) {
-            matchesStation = train.STATION === selectedStation;
+            const normalizedSelectedStation = selectedStation.toLowerCase().replace(" station", "").trim();
+            const normalizedTrainStation = train.STATION.toLowerCase().replace(" station", "").trim();
+
+            matchesStation = normalizedTrainStation === normalizedSelectedStation;
             console.log("Filtering train by station:", train.STATION); // Debug log to verify filtering by station
         }
 
-        let matchesFilters = true;
-        if (activeFilters.includes('Arriving')) {
-            matchesFilters = train.STATUS === 'Arriving';
-        }
-        if (activeFilters.includes('Scheduled')) {
-            matchesFilters = train.STATUS === 'Scheduled';
+        if (selectedDirection) {
+            matchesDirection = train.DIRECTION === selectedDirection;
+            console.log("Filtering train by direction:", train.DIRECTION); // Debug log to verify filtering by direction
         }
 
-        return matchesLine && matchesStation && matchesFilters;
+        if (activeFilter === 'Arriving') {
+            const waitingSeconds = parseInt(train.WAITING_SECONDS);
+            matchesFilters = waitingSeconds <= 60; // Consider "Arriving" as trains arriving in 2 minutes or less
+        } else if (activeFilter === 'Scheduled') {
+            const waitingSeconds = parseInt(train.WAITING_SECONDS);
+            matchesFilters = waitingSeconds > 60; // Scheduled trains arriving in more than 2 minutes
+        }
+
+        return matchesLine && matchesStation && matchesDirection && matchesFilters;
     });
 
+
+    // Correctly fetch stations for the current line
     const currentLineStations = stationData.find(line => line.line.toLowerCase() === currColor.toLowerCase());
 
     return (
@@ -92,8 +131,10 @@ const LinesPage: React.FC = () => {
                     lineName={currColor}
                     handleLineChange={handleLineChange}
                     directionButtons={directionButtons}
-                    activeFilters={activeFilters} // Pass active filters
+                    activeFilters={activeFilter ? [activeFilter] : []} // Pass active filters as an array
                     toggleFilter={toggleFilter} // Pass filter toggle function
+                    onDirectionChange={handleDirectionChange} // Pass direction change function
+                    selectedDirection={selectedDirection} // Pass selected direction
                 />
 
                 {/* Conditionally render TrainList */}

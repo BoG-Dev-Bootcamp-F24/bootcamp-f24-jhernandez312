@@ -202,7 +202,39 @@
   font-weight: bold;
 }
 
-.navbar ul li.selected {
+/* Flexbox for buttons in a row */
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  /* Space between buttons */
+  margin-top: 10px;
+}
+
+.direction-buttons,
+.line-filter-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.direction-buttons button,
+.line-filter-buttons button {
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: none;
+  background-color: #eaeaea;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.direction-buttons button:hover,
+.line-filter-buttons button:hover {
+  background-color: #d4d4d4;
+}
+
+.direction-buttons button.selected,
+.line-filter-buttons button.selected {
   background-color: #666;
   color: white;
   font-weight: bold;

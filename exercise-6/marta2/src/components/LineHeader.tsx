@@ -4,11 +4,13 @@ interface LineHeaderProps {
     lineName: string;
     handleLineChange: (line: string) => void;
     directionButtons: string[];
-    activeFilters: string[]; // Pass the active filters
-    toggleFilter: (filter: string) => void; // Function to toggle filters
+    activeFilters: string[];
+    toggleFilter: (filter: string) => void;
+    selectedDirection: string | null;
+    onDirectionChange: (direction: string) => void;
 }
 
-const LineHeader: React.FC<LineHeaderProps> = ({ lineName, handleLineChange, directionButtons, activeFilters, toggleFilter }) => {
+const LineHeader: React.FC<LineHeaderProps> = ({ lineName, handleLineChange, directionButtons, activeFilters, toggleFilter, selectedDirection, onDirectionChange }) => {
     return (
         <div className="line-header">
             <h1>{lineName}</h1>
@@ -21,23 +23,34 @@ const LineHeader: React.FC<LineHeaderProps> = ({ lineName, handleLineChange, dir
                 <button onClick={() => handleLineChange("Green")} style={{ backgroundColor: "green" }}>Green</button>
             </div>
 
-            {/* Filter buttons */}
-            <div className="line-filter-buttons">
-                <button
-                    className={activeFilters.includes('Arriving') ? 'active' : ''}
-                    onClick={() => toggleFilter('Arriving')}
-                >
-                    Arriving
-                </button>
-                <button
-                    className={activeFilters.includes('Scheduled') ? 'active' : ''}
-                    onClick={() => toggleFilter('Scheduled')}
-                >
-                    Scheduled
-                </button>
-                {directionButtons.map((button, index) => (
-                    <button key={index}>{button}</button>
-                ))}
+            {/* Combined Direction and Filter buttons in a row */}
+            <div className="button-row">
+                <div className="direction-buttons">
+                    {directionButtons.map((direction, index) => (
+                        <button
+                            key={index}
+                            onClick={() => onDirectionChange(direction.charAt(0))}
+                            className={selectedDirection === direction.charAt(0) ? 'selected' : ''}
+                        >
+                            {direction}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="line-filter-buttons">
+                    <button
+                        className={activeFilters.includes('Arriving') ? 'selected' : ''}
+                        onClick={() => toggleFilter('Arriving')}
+                    >
+                        Arriving
+                    </button>
+                    <button
+                        className={activeFilters.includes('Scheduled') ? 'selected' : ''}
+                        onClick={() => toggleFilter('Scheduled')}
+                    >
+                        Scheduled
+                    </button>
+                </div>
             </div>
         </div>
     );
